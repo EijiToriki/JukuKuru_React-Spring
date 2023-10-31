@@ -1,0 +1,73 @@
+<mxfile host="65bd71144e">
+    <diagram id="Rfbo9xrgc3u0nFRbIgvp" name="Page-1">
+        <mxGraphModel dx="1431" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="6" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeColor=#FF0000;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="170" width="470" height="680" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;b&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;学習塾 受講日予約システム&lt;br&gt;「JukuKuru」&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="20" y="30" width="340" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="・システムの目指すゴール" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="90" width="295" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="4" target="8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="4" target="12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="先生" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=24;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="410" width="45" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="5" target="10">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="5" target="12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="5" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="生徒" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=24;" vertex="1" parent="1">
+                    <mxGeometry x="740" y="410" width="45" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="&lt;font color=&quot;#ff0000&quot; style=&quot;font-size: 18px;&quot;&gt;JukuKuru&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="405" y="180" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="① 授業日を&lt;br&gt;設定" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="② 来塾日を&lt;br&gt;入力" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="490" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="③ 来塾日の参照" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="425" width="350" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="④ 来塾日の変更" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="580" width="350" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;strokeColor=#FF0000;" edge="1" parent="1" source="21" target="10">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="・座席が満員の場合は、予約できない&lt;br&gt;・座席は早い者勝ちとする" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#b85450;fontSize=18;fillColor=#f8cecc;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="500" y="60" width="330" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" style="edgeStyle=none;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#FF0000;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="23" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" style="edgeStyle=none;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#FF0000;fontSize=18;fontColor=#FF0000;endArrow=none;endFill=0;" edge="1" parent="1" source="23" target="27">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="・操作確定後、先生に通知する" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#b85450;fontSize=18;fillColor=#f8cecc;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="10" y="880" width="300" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="⑤ 来塾日の取消" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="740" width="350" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
