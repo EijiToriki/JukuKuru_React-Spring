@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="czgE1TtSLrGN9WjyBTog" name="Page-1">
-        <mxGraphModel dx="644" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1693" dy="927" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -66,6 +66,9 @@
                 </mxCell>
                 <mxCell id="20" value="受講日変更" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
                     <mxGeometry x="263.75" y="910" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="151" style="edgeStyle=none;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="21" target="133">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="21" value="受講日取消" style="rounded=0;whiteSpace=wrap;html=1;fontSize=18;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
                     <mxGeometry x="403.75" y="910" width="130" height="70" as="geometry"/>
