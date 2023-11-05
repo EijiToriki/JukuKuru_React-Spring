@@ -14,4 +14,8 @@ public class ClassroomEntity {
     private int capacity;
     private List<StudentEntity> students;
     private List<ClassEntity> classes;
+
+    public void add_class(ClassEntity classEntity){
+        classes.add(classEntity);
+    }
 }
