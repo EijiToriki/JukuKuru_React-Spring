@@ -9,4 +9,6 @@ import java.util.Map;
 public interface ClassroomRepository {
 
     List<Map<String, Object>> findByClassroomId(int classroomId);
+
+    int registerDatesByStudentId(int studentId, List<Integer> classIds);
 }

@@ -30,4 +30,21 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
 
         return result;
     }
+
+
+    @Override
+    public int registerDatesByStudentId(int studentId, List<Integer> classIds){
+        for(Integer classId : classIds){
+            int result = jdbcTemplate.update("""
+                    INSERT INTO class_management(class_id, student_id)
+                    VALUES(?, ?)
+                    """, classId, studentId);
+            // 1行の更新でない場合、異常終了
+            if(result != 1){
+                return 9;
+            }
+        }
+        // 正常終了
+        return 0;
+    }
 }

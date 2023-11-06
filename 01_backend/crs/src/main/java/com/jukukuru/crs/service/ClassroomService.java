@@ -32,4 +32,10 @@ public class ClassroomService {
 
         return result;
     }
+
+
+    public int registerDatesbyStudent(int studentId, List<Integer> classIds){
+        return classroomRepository.registerDatesByStudentId(studentId, classIds);
+    }
+
 }
