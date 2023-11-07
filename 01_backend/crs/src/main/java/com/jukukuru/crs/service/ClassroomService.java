@@ -4,6 +4,7 @@ import com.jukukuru.crs.entity.ClassEntity;
 import com.jukukuru.crs.repository.ClassroomRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,30 @@ public class ClassroomService {
 
     public List<ClassEntity> findByClassroomId(int classroomId){
         List<Map<String, Object>> queryResult = classroomRepository.findByClassroomId(classroomId);
+        return generateClassEntityList(queryResult);
+    }
 
+
+    @Transactional
+    public int registerDatesbyStudent(int studentId, List<Integer> classIds){
+        return classroomRepository.registerDatesByStudentId(studentId, classIds);
+    }
+
+
+    public List<ClassEntity> findByStudentId(int studentId){
+        List<Map<String, Object>> queryResult = classroomRepository.findByStudentId(studentId);
+        return generateClassEntityList(queryResult);
+    }
+
+
+    @Transactional
+    public int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds){
+        return classroomRepository.deleteDatesByStudentId(studentId, deleteClassIds);
+    }
+
+
+    // ClassEntity(id, 日付, コマID)を要素とするリストを生成
+    private List<ClassEntity> generateClassEntityList(List<Map<String, Object>> queryResult){
         List<ClassEntity> result = new ArrayList<ClassEntity>();
         for(Map<String, Object> row : queryResult) {
             // Todo : 絶対この方法は良くないので、リファクタしたい
@@ -29,13 +53,7 @@ public class ClassroomService {
             );
             result.add((classEntity));
         }
-
         return result;
-    }
-
-
-    public int registerDatesbyStudent(int studentId, List<Integer> classIds){
-        return classroomRepository.registerDatesByStudentId(studentId, classIds);
     }
 
 }

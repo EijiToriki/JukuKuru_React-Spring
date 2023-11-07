@@ -2,6 +2,8 @@ package com.jukukuru.crs.controller;
 
 import com.jukukuru.crs.entity.ClassEntity;
 import com.jukukuru.crs.entity.ClassroomEntity;
+import com.jukukuru.crs.requestData.ComeDateRequest;
+import com.jukukuru.crs.requestData.DeleteDateRequest;
 import com.jukukuru.crs.requestData.OpenDateRequest;
 import com.jukukuru.crs.requestData.RegisterDateRequest;
 import com.jukukuru.crs.service.ClassroomService;
@@ -24,9 +26,9 @@ public class ClassroomController {
     @GetMapping("/getOpenDate")
     public List<ClassEntity> getOpenDate(@RequestBody OpenDateRequest openDateRequest){
         int classroomId = openDateRequest.getClassroomId();
-        System.out.println(classroomId);
         return classroomService.findByClassroomId(classroomId);
     }
+
 
     @PostMapping("/registerDate")
     public int registerDate(@RequestBody RegisterDateRequest registerDateRequest){
@@ -36,5 +38,18 @@ public class ClassroomController {
         return classroomService.registerDatesbyStudent(studentId, classIds);
     }
 
+
+    @GetMapping("/getComeDate")
+    public List<ClassEntity> getComeDate(@RequestBody ComeDateRequest comeDateRequest){
+        int studentId = comeDateRequest.getStudentId();
+        return classroomService.findByStudentId(studentId);
+    }
+
+    @DeleteMapping("/deleteComeDate")
+    public int deleteComeDate(@RequestBody DeleteDateRequest deleteDateRequest){
+        int studentId = deleteDateRequest.getStudentId();
+        List<Integer> deleteClassIds = deleteDateRequest.getDeleteClassIds();
+        return classroomService.deleteDatesByStudentId(studentId, deleteClassIds);
+    }
 
 }

@@ -11,4 +11,8 @@ public interface ClassroomRepository {
     List<Map<String, Object>> findByClassroomId(int classroomId);
 
     int registerDatesByStudentId(int studentId, List<Integer> classIds);
+
+    List<Map<String, Object>> findByStudentId(int studentId);
+
+    int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds);
 }
