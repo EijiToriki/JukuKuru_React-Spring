@@ -14,5 +14,9 @@ public interface ClassroomRepository {
 
     List<Map<String, Object>> findByStudentId(int studentId);
 
+    List<Map<String, Object>> findOptionalDate(int studentId, int classroomId);
+
+    int updateDatesByStudentId(int studentId, List<Integer> beforeClassIds, List<Integer> afterClassIds);
+
     int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds);
 }

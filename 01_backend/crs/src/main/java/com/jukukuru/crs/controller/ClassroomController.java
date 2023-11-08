@@ -1,15 +1,9 @@
 package com.jukukuru.crs.controller;
 
 import com.jukukuru.crs.entity.ClassEntity;
-import com.jukukuru.crs.entity.ClassroomEntity;
-import com.jukukuru.crs.requestData.ComeDateRequest;
-import com.jukukuru.crs.requestData.DeleteDateRequest;
-import com.jukukuru.crs.requestData.OpenDateRequest;
-import com.jukukuru.crs.requestData.RegisterDateRequest;
+import com.jukukuru.crs.requestData.*;
 import com.jukukuru.crs.service.ClassroomService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +38,24 @@ public class ClassroomController {
         int studentId = comeDateRequest.getStudentId();
         return classroomService.findByStudentId(studentId);
     }
+
+
+    @GetMapping("/getOptionalDate")
+    public List<ClassEntity> getOptionalDate(@RequestBody OptionalDateRequest optionalDateRequest){
+        int studentId = optionalDateRequest.getStudentId();;
+        int classroomId = optionalDateRequest.getClassroomId();
+        return classroomService.findOptionalDate(studentId, classroomId);
+    }
+
+
+    @PutMapping("/changeDate")
+    public int changeDate(@RequestBody ChangeDateRequest changeDateRequest){
+        int studentId = changeDateRequest.getStudentId();
+        List<Integer> beforeClassIds = changeDateRequest.getBeforeClassIds();
+        List<Integer> afterClassIds = changeDateRequest.getAfterClassIds();
+        return classroomService.updateDatesByStudentId(studentId, beforeClassIds, afterClassIds);
+    }
+
 
     @DeleteMapping("/deleteComeDate")
     public int deleteComeDate(@RequestBody DeleteDateRequest deleteDateRequest){

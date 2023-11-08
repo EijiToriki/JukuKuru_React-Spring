@@ -35,6 +35,17 @@ public class ClassroomService {
     }
 
 
+    public List<ClassEntity> findOptionalDate(int studentId, int classroomId){
+        List<Map<String, Object>> queryResult = classroomRepository.findOptionalDate(studentId, classroomId);
+        return generateClassEntityList(queryResult);
+    }
+
+
+    @Transactional
+    public int updateDatesByStudentId(int studentId, List<Integer> beforeClassIds, List<Integer> afterClassIds){
+        return classroomRepository.updateDatesByStudentId(studentId, beforeClassIds, afterClassIds);
+    }
+
     @Transactional
     public int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds){
         return classroomRepository.deleteDatesByStudentId(studentId, deleteClassIds);
