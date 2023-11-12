@@ -6,27 +6,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import {classRoomDatesDummy, comeDatesDummy} from '../dummy_data/inquiryDummy';
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('12/26', 159, 6.0, 24, 4.0),
-  createData('12/27', 237, 9.0, 37, 4.3),
-  createData('12/28', 262, 16.0, 24, 6.0),
-  createData('12/29', 305, 3.7, 67, 4.3),
-  createData('12/30', 356, 16.0, 49, 3.9),
-];
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const comeDates = comeDatesDummy
 const classRoomDates = classRoomDatesDummy
 
 export default function InquiryScreen() {
   const [classDates, setClassDates] = React.useState([])
+  const [studentDatesObj, setStudentDatesObj] = React.useState({})
   const [komaList, setKomaList] = React.useState([])
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     const dateList = []
@@ -39,51 +32,71 @@ export default function InquiryScreen() {
         komaList.push(classRoomDate.class_time)
       }
     }
-
     dateList.sort(function(a, b) {
       return a.localeCompare(b)
     })
     komaList.sort(function(a, b) {
       return a - b;
     })
-
     setClassDates(dateList)
     setKomaList(komaList)
+
+    const studentDatesObj = {}
+    for (const comeDate of comeDates) {
+      if (!studentDatesObj[comeDate.date]) {
+        studentDatesObj[comeDate.date] = [];
+      }
+      studentDatesObj[comeDate.date].push(comeDate.class_time);
+    }
+    setStudentDatesObj(studentDatesObj)
+    console.log(studentDatesObj)
   }, [])
 
+  const backTopPage = () =>{
+    navigate("/")  
+  }
 
   return (
-    <Grid container spacing={2} width="80%" margin="auto" marginTop="5%">
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>授業日</TableCell>
-              {
-                komaList.map((koma) => (
-                  <TableCell align="right" key={koma}>{koma}コマ目</TableCell>
-                ))
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {classDates.map((date) => (
-              <TableRow
-                key={date}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">{date}</TableCell>
+    <Grid container spacing={2} width="80%" margin="auto">
+      <Grid item xs={12} marginTop="2%">
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>授業日</TableCell>
                 {
                   komaList.map((koma) => (
-                    // Todo : ここで生徒の来塾日情報から、三項演算子でしょりを分ける
                     <TableCell align="right" key={koma}>{koma}コマ目</TableCell>
                   ))
                 }
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {classDates.map((date) => (
+                <TableRow
+                  key={date}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">{date}</TableCell>
+                  {
+                    komaList.map((koma) => (
+                      studentDatesObj[date] && studentDatesObj[date].indexOf(koma) !== -1 ?
+                        <TableCell align="right" key={koma}><CircleOutlinedIcon /></TableCell>
+                      :
+                        <TableCell align="right" key={koma}><ClearOutlinedIcon /></TableCell>
+                    ))
+                  }
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid item xs={12} marginTop="1%" alignItems="right">
+        <Box flexDirection="row" justifyContent="flex-end" display="flex">
+          <Button variant="contained" color="inherit" onClick={backTopPage}>戻る</Button>
+        </Box>
+      </Grid>
     </Grid>
   );
 }
