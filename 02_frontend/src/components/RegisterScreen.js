@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,39 +7,40 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, Button, Grid, IconButton } from '@mui/material';
-import { classRoomDatesDummy } from '../dummy_data/inquiryDummy';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import LensIcon from '@mui/icons-material/Lens';
 import { useNavigate } from 'react-router-dom';
-import { getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
+import { fetchClassRoomDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
 import BackButton from '../common/BackButton';
-
-const classRoomDates = classRoomDatesDummy
 
 export default function RegisterScreen() {
   const [classDates, setClassDates] = React.useState([])
+  const [classDatesResponse, setClassDatesResponse] = useState({})
   const [openDatesObj, setOpenDatesObj] = React.useState({})
   const [komaList, setKomaList] = React.useState([])
   const [selectIcons, setSelectIcons] = React.useState({});
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    const dateList = getClassRoomPropList(classRoomDates, "date")
-    setClassDates(
-      dateList.sort(function(a, b) {
-        return a.localeCompare(b)
-      })
-    )
-
-    const komaList = getClassRoomPropList(classRoomDates, "class_time")
-    setKomaList(
-      komaList.sort(function(a, b) {
-        return a - b;
-      })
-    )
-    
-    const openDatesObj = getDateClasstimeObj(classRoomDates)
-    setOpenDatesObj(openDatesObj)
+    fetchClassRoomDates().then(classRoomDates => {
+      setClassDatesResponse(classRoomDates)
+      const dateList = getClassRoomPropList(classRoomDates, "date")
+      setClassDates(
+        dateList.sort(function(a, b) {
+          return a.localeCompare(b)
+        })
+      )
+  
+      const komaList = getClassRoomPropList(classRoomDates, "class_time")
+      setKomaList(
+        komaList.sort(function(a, b) {
+          return a - b;
+        })
+      )
+      
+      const openDatesObj = getDateClasstimeObj(classRoomDates)
+      setOpenDatesObj(openDatesObj)
+    })
   }, [])
 
   const handleIconClick = (objIdx) => {
@@ -53,7 +54,7 @@ export default function RegisterScreen() {
   }
 
   const getClassRoomId = (date, koma) => {
-    for(const classRoomDate of classRoomDates){
+    for(const classRoomDate of classDatesResponse){
       if(classRoomDate.date === date && classRoomDate.class_time === koma){
         return classRoomDate.id
       }

@@ -14,12 +14,13 @@ import java.util.List;
 @RequestMapping
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ClassroomController {
 
     private final ClassroomService classroomService;
+
     @GetMapping("/getOpenDate")
-    public List<ClassEntity> getOpenDate(@RequestBody OpenDateRequest openDateRequest){
-        int classroomId = openDateRequest.getClassroomId();
+    public List<ClassEntity> getOpenDate(@RequestParam int classroomId){
         return classroomService.findByClassroomId(classroomId);
     }
 
@@ -34,8 +35,7 @@ public class ClassroomController {
 
 
     @GetMapping("/getComeDate")
-    public List<ClassEntity> getComeDate(@RequestBody ComeDateRequest comeDateRequest){
-        int studentId = comeDateRequest.getStudentId();
+    public List<ClassEntity> getComeDate(@RequestParam int studentId){
         return classroomService.findByStudentId(studentId);
     }
 

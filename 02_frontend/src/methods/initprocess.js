@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { baseURL } from "../common/Constants"
+
 const getClassRoomPropList = (classRoomDates, keyName) => {
   const propList = []
   for(const classRoomDate of classRoomDates){
@@ -21,4 +24,34 @@ const getDateClasstimeObj = (dateClasstimeProps) => {
 }
 
 
-export { getClassRoomPropList, getDateClasstimeObj }
+const fetchClassRoomDates = async() => {
+  const params = {
+    classroomId: 1
+  }
+  try{
+    const res = await axios.get(baseURL + "getOpenDate", {
+      params
+    })
+    return res.data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+
+const fetchStudentDates = async() => {
+  const params = {
+    studentId: 1
+  }
+  try{
+    const res = await axios.get(baseURL + "getComeDate", {
+      params
+    })
+    return res.data
+  }catch(error){
+    console.log(error)
+  } 
+}
+
+
+export { getClassRoomPropList, getDateClasstimeObj, fetchClassRoomDates, fetchStudentDates }

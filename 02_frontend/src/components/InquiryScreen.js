@@ -7,14 +7,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
-import {classRoomDatesDummy, comeDatesDummy} from '../dummy_data/inquiryDummy';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
+import { fetchClassRoomDates, fetchStudentDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
 import BackButton from '../common/BackButton';
 
-const comeDates = comeDatesDummy
-const classRoomDates = classRoomDatesDummy
 
 export default function InquiryScreen() {
   const [classDates, setClassDates] = React.useState([])
@@ -22,23 +19,26 @@ export default function InquiryScreen() {
   const [komaList, setKomaList] = React.useState([])
 
   React.useEffect(() => {
-    const dateList = getClassRoomPropList(classRoomDates, "date")
-    setClassDates(
-      dateList.sort(function(a, b) {
-        return a.localeCompare(b)
-      })
-    )
+    fetchClassRoomDates().then(classRoomDates => {
+      const dateList = getClassRoomPropList(classRoomDates, "date")
+      setClassDates(
+        dateList.sort(function(a, b) {
+          return a.localeCompare(b)
+        })
+      )
+  
+      const komaList = getClassRoomPropList(classRoomDates, "class_time")
+      setKomaList(
+        komaList.sort(function(a, b) {
+          return a - b;
+        })
+      )
+    })
 
-    const komaList = getClassRoomPropList(classRoomDates, "class_time")
-    setKomaList(
-      komaList.sort(function(a, b) {
-        return a - b;
-      })
-    )
-
-    const studentDatesObj = getDateClasstimeObj(comeDates)
-    setStudentDatesObj(studentDatesObj)
-
+    fetchStudentDates().then(studentDates => {
+      const studentDatesObj = getDateClasstimeObj(studentDates)
+      setStudentDatesObj(studentDatesObj)
+    })
   }, [])
 
   return (
