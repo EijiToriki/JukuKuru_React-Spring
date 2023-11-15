@@ -12,6 +12,7 @@ import LensIcon from '@mui/icons-material/Lens';
 import { useNavigate } from 'react-router-dom';
 import { fetchClassRoomDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
 import BackButton from '../common/BackButton';
+import { registerDateToServer } from '../methods/requestProcess';
 
 export default function RegisterScreen() {
   const [classDates, setClassDates] = React.useState([])
@@ -62,6 +63,13 @@ export default function RegisterScreen() {
   }
 
   const handleRegister = () => {
+    const postClassIds = []
+    for(const selectIconId in selectIcons){
+      if(selectIcons[selectIconId]){
+        postClassIds.push(selectIconId)
+      }
+    }
+    registerDateToServer(postClassIds)
     navigate("/")
   }
 
