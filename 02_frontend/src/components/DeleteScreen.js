@@ -2,15 +2,22 @@ import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } f
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
 import { fetchStudentDates, getDateClasstimeObj } from '../methods/initprocess'
+import { useNavigate } from 'react-router-dom'
+import { deleteDateToServer } from '../methods/requestProcess'
 
 export default function DeleteScreen() {
+  // Todo : 状態変数の命名規則 決める
   const [formCnt, setFormCnt] = useState([0])
   const [delDate, setDelDate] = useState([])
+  const [delKoma, setDelKoma] = useState([])
   const [studentDatesObj, setStudentDatesObj] = useState({})
   const [studentDatesOnly, setStudentDatesOnly] = useState([])
+  const [classDatesResponse, setClassDatesResponse] = useState({})
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     fetchStudentDates().then(studentDates => {
+      setClassDatesResponse(studentDates)
       const studentDatesObj = getDateClasstimeObj(studentDates)
       setStudentDatesObj(studentDatesObj)
 
@@ -26,7 +33,7 @@ export default function DeleteScreen() {
     })
   }, [])
 
-  const handleChange = (event, cnt) => {
+  const handleDateChange = (event, cnt) => {
     const newDelDate = [...delDate]
     if(newDelDate.length === cnt){
       newDelDate.push(event.target.value)
@@ -36,13 +43,43 @@ export default function DeleteScreen() {
     setDelDate(newDelDate)
   }
 
+  const handleKomaChange = (event, cnt) => {
+    const newDelKoma = [...delKoma]
+    if(newDelKoma.length === cnt){
+      newDelKoma.push(event.target.value)
+    }else{
+      newDelKoma[cnt] = event.target.value
+    }
+    setDelKoma(newDelKoma)
+  }
+
   const handleFormAdd = () => {
     const newFormCnt = [...formCnt]
     newFormCnt.push(newFormCnt.length)
     setFormCnt(newFormCnt)
   }
 
+  const handleDelete = () => {
+    const deleteClassIds = []
+    for(let i=0; i < delDate.length; i++){
+      let delClassId = getClassRoomId(delDate[i], delKoma[i])
+      deleteClassIds.push(delClassId)
+    }
+    deleteDateToServer(1, deleteClassIds)
+    navigate("/")
+  }
+
+
+  const getClassRoomId = (date, koma) => {
+    for(const classRoomDate of classDatesResponse){
+      if(classRoomDate.date === date && classRoomDate.class_time === koma){
+        return classRoomDate.id
+      }
+    }
+  }
+
   return (
+    // Todo 変更画面と似ているため、コンポーネント化する
     <Grid container spacing={2} width="80%" margin="auto">
       {
       formCnt.map((cnt) => (
@@ -55,7 +92,7 @@ export default function DeleteScreen() {
                 id="delete-date"
                 value={delDate[cnt]}
                 label="date"
-                onChange={(event) => handleChange(event, cnt)}
+                onChange={(event) => handleDateChange(event, cnt)}
               >
                 {
                 studentDatesOnly.map((studentDate) => (
@@ -66,14 +103,14 @@ export default function DeleteScreen() {
             </FormControl>  
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={4} marginTop='2%'>
             <FormControl fullWidth>
               <InputLabel id="delete-komas">コマ</InputLabel>
               <Select
                 labelId="delete-komas"
                 id="delete-koma"
                 label="koma"
-                onChange={(event) => handleChange(event, cnt)}
+                onChange={(event) => handleKomaChange(event, cnt)}
               >
                 {
                   studentDatesObj[delDate[cnt]] ?
@@ -92,7 +129,7 @@ export default function DeleteScreen() {
       
       <Grid item xs={10} marginTop="1%" alignItems="right" marginBottom="2%">
         <Box flexDirection="row" justifyContent="flex-end" display="flex">
-          <Button variant="contained" color="primary">登録</Button>
+          <Button variant="contained" color="primary" onClick={handleDelete}>登録</Button>
         </Box>
       </Grid>
       <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">

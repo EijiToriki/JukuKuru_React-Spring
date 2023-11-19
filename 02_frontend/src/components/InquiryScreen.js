@@ -14,6 +14,7 @@ import BackButton from '../common/BackButton';
 
 
 export default function InquiryScreen() {
+  // Todo : 状態変数の命名規則 決める
   const [classDates, setClassDates] = React.useState([])
   const [studentDatesObj, setStudentDatesObj] = React.useState({})
   const [komaList, setKomaList] = React.useState([])

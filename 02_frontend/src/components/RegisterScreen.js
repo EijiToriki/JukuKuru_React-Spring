@@ -15,6 +15,7 @@ import BackButton from '../common/BackButton';
 import { registerDateToServer } from '../methods/requestProcess';
 
 export default function RegisterScreen() {
+  // Todo : 状態変数の命名規則 決める
   const [classDates, setClassDates] = React.useState([])
   const [classDatesResponse, setClassDatesResponse] = useState({})
   const [openDatesObj, setOpenDatesObj] = React.useState({})
@@ -54,6 +55,7 @@ export default function RegisterScreen() {
     setSelectIcons(newSelectIcons)
   }
 
+  // Todo Commonメソッドにする : DeleteScreen.js にも同じような処理がある
   const getClassRoomId = (date, koma) => {
     for(const classRoomDate of classDatesResponse){
       if(classRoomDate.date === date && classRoomDate.class_time === koma){
@@ -69,7 +71,7 @@ export default function RegisterScreen() {
         postClassIds.push(selectIconId)
       }
     }
-    registerDateToServer(postClassIds)
+    registerDateToServer(1, postClassIds)
     navigate("/")
   }
 
