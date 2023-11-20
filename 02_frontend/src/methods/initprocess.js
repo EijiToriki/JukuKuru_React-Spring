@@ -24,6 +24,7 @@ const getDateClasstimeObj = (dateClasstimeProps) => {
 }
 
 
+// Todo : 処理内容大した変わらないので、ひとまとめにしたい
 const fetchClassRoomDates = async() => {
   const params = {
     classroomId: 1
@@ -54,4 +55,21 @@ const fetchStudentDates = async() => {
 }
 
 
-export { getClassRoomPropList, getDateClasstimeObj, fetchClassRoomDates, fetchStudentDates }
+const fetchExistStudentDates = async() => {
+  const params = {
+    studentId: 1,
+    classroomId: 1
+  }
+  try{
+    const res = await axios.get(baseURL + "getOptionalDate", {
+      params
+    })
+    return res.data
+  }catch(error){
+    console.log(error)
+  } 
+}
+/////////////////////////////////////////////////////////////////////
+
+
+export { getClassRoomPropList, getDateClasstimeObj, fetchClassRoomDates, fetchStudentDates, fetchExistStudentDates }

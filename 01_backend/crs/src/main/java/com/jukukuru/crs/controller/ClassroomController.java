@@ -41,9 +41,7 @@ public class ClassroomController {
 
 
     @GetMapping("/getOptionalDate")
-    public List<ClassEntity> getOptionalDate(@RequestBody OptionalDateRequest optionalDateRequest){
-        int studentId = optionalDateRequest.getStudentId();;
-        int classroomId = optionalDateRequest.getClassroomId();
+    public List<ClassEntity> getOptionalDate(@RequestParam int studentId, int classroomId){
         return classroomService.findOptionalDate(studentId, classroomId);
     }
 
@@ -61,6 +59,7 @@ public class ClassroomController {
     public int deleteComeDate(@RequestBody DeleteDateRequest deleteDateRequest){
         int studentId = deleteDateRequest.getStudentId();
         List<Integer> deleteClassIds = deleteDateRequest.getDeleteClassIds();
+        System.out.println(deleteClassIds);
         return classroomService.deleteDatesByStudentId(studentId, deleteClassIds);
     }
 

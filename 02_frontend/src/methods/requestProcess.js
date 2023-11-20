@@ -36,4 +36,22 @@ const deleteDateToServer = async(studentId, deleteClassIds) => {
   }
 }
 
-export {registerDateToServer, deleteDateToServer}
+
+const updateDateToServer = async(studentId, beforeClassIds, afterClassIds) => {
+  try{
+    const dataToSend = {
+      "studentId": studentId,
+      "beforeClassIds": beforeClassIds,
+      "afterClassIds": afterClassIds
+    }
+    const response = await axios.put(baseURL + "changeDate", dataToSend, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }catch(error){
+    console.error('Error:', error.message)
+  }
+}
+
+export {registerDateToServer, deleteDateToServer, updateDateToServer}
