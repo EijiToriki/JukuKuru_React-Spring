@@ -1,9 +1,10 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
-import { fetchStudentDates, getDateClasstimeObj } from '../methods/initprocess'
+import { fetchStudentDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { deleteDateToServer } from '../methods/requestProcess'
+import { getClassRoomId } from '../methods/commonProcess'
 
 export default function DeleteScreen() {
   // Todo : 状態変数の命名規則 決める
@@ -62,22 +63,14 @@ export default function DeleteScreen() {
   const handleDelete = () => {
     const deleteClassIds = []
     for(let i=0; i < delDate.length; i++){
-      let delClassId = getClassRoomId(delDate[i], delKoma[i])
+      let delClassId = getClassRoomId(classDatesResponse, delDate[i], delKoma[i])
       deleteClassIds.push(delClassId)
     }
     deleteDateToServer(1, deleteClassIds)
     navigate("/")
   }
 
-
-  const getClassRoomId = (date, koma) => {
-    for(const classRoomDate of classDatesResponse){
-      if(classRoomDate.date === date && classRoomDate.class_time === koma){
-        return classRoomDate.id
-      }
-    }
-  }
-
+  
   return (
     // Todo 変更画面と似ているため、コンポーネント化する
     <Grid container spacing={2} width="80%" margin="auto">

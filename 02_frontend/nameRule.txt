@@ -1,0 +1,8 @@
+・状態変数の命名規則 
+    ・教室開放日：openDate
+    ・教室開放コマ：comaKoma
+    ・来塾日：comeDate
+    ・来塾コマ：comeKoma
+    ・授業日:空きコマリスト：schedule
+    ・レスポンスには末尾にResを付ける
+

@@ -9,36 +9,41 @@ import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { fetchClassRoomDates, fetchStudentDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
+import { fetchDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initProcess';
 import BackButton from '../common/BackButton';
 
 
 export default function InquiryScreen() {
-  // Todo : 状態変数の命名規則 決める
-  const [classDates, setClassDates] = React.useState([])
-  const [studentDatesObj, setStudentDatesObj] = React.useState({})
-  const [komaList, setKomaList] = React.useState([])
+  const [openDateList, setOpenDateList] = React.useState([])
+  const [openKomaList, setOpenKomaList] = React.useState([])
+  const [comeDateKomaTable, setComeDateKomaTable] = React.useState({})
 
   React.useEffect(() => {
-    fetchClassRoomDates().then(classRoomDates => {
+    const getOpenDateParams = {
+      classroomId: 1
+    }
+    fetchDates(getOpenDateParams, "getOpenDate").then(classRoomDates => {
       const dateList = getClassRoomPropList(classRoomDates, "date")
-      setClassDates(
+      setOpenDateList(
         dateList.sort(function(a, b) {
           return a.localeCompare(b)
         })
       )
   
-      const komaList = getClassRoomPropList(classRoomDates, "class_time")
-      setKomaList(
-        komaList.sort(function(a, b) {
+      const openKomaList = getClassRoomPropList(classRoomDates, "class_time")
+      setOpenKomaList(
+        openKomaList.sort(function(a, b) {
           return a - b;
         })
       )
     })
 
-    fetchStudentDates().then(studentDates => {
-      const studentDatesObj = getDateClasstimeObj(studentDates)
-      setStudentDatesObj(studentDatesObj)
+    const getComeDateParams = {
+      studentId: 1
+    }
+    fetchDates(getComeDateParams, "getComeDate").then(studentDates => {
+      const comeDateKomaTable = getDateClasstimeObj(studentDates)
+      setComeDateKomaTable(comeDateKomaTable)
     })
   }, [])
 
@@ -51,22 +56,22 @@ export default function InquiryScreen() {
               <TableRow>
                 <TableCell>授業日</TableCell>
                 {
-                  komaList.map((koma) => (
+                  openKomaList.map((koma) => (
                     <TableCell align="right" key={koma}>{koma}コマ目</TableCell>
                   ))
                 }
               </TableRow>
             </TableHead>
             <TableBody>
-              {classDates.map((date) => (
+              {openDateList.map((date) => (
                 <TableRow
                   key={date}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">{date}</TableCell>
                   {
-                    komaList.map((koma) => (
-                      studentDatesObj[date] && studentDatesObj[date].indexOf(koma) !== -1 ?
+                    openKomaList.map((koma) => (
+                      comeDateKomaTable[date] && comeDateKomaTable[date].indexOf(koma) !== -1 ?
                         <TableCell align="right" key={koma}><CircleOutlinedIcon /></TableCell>
                       :
                         <TableCell align="right" key={koma}><ClearOutlinedIcon /></TableCell>

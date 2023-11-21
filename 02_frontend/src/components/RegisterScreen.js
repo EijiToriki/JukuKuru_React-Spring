@@ -10,38 +10,41 @@ import { Box, Button, Grid, IconButton } from '@mui/material';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import LensIcon from '@mui/icons-material/Lens';
 import { useNavigate } from 'react-router-dom';
-import { fetchClassRoomDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initprocess';
+import { fetchDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initProcess';
 import BackButton from '../common/BackButton';
 import { registerDateToServer } from '../methods/requestProcess';
+import { getClassRoomId } from '../methods/commonProcess';
 
 export default function RegisterScreen() {
-  // Todo : 状態変数の命名規則 決める
-  const [classDates, setClassDates] = React.useState([])
-  const [classDatesResponse, setClassDatesResponse] = useState({})
-  const [openDatesObj, setOpenDatesObj] = React.useState({})
-  const [komaList, setKomaList] = React.useState([])
+  const [openDateRes, setOpenDateRes] = useState({})
+  const [openDateList, setOpenDateList] = React.useState([])
+  const [openKomaList, setOpenKomaList] = React.useState([])
+  const [openDateKomaTable, setOpenDateKomaTable] = React.useState({})
   const [selectIcons, setSelectIcons] = React.useState({});
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    fetchClassRoomDates().then(classRoomDates => {
-      setClassDatesResponse(classRoomDates)
-      const dateList = getClassRoomPropList(classRoomDates, "date")
-      setClassDates(
+    const params = {
+      classroomId: 1
+    }
+    fetchDates(params, "getOpenDate").then(resData => {
+      setOpenDateRes(resData)
+      const dateList = getClassRoomPropList(resData, "date")
+      setOpenDateList(
         dateList.sort(function(a, b) {
           return a.localeCompare(b)
         })
       )
   
-      const komaList = getClassRoomPropList(classRoomDates, "class_time")
-      setKomaList(
-        komaList.sort(function(a, b) {
+      const openKomaList = getClassRoomPropList(resData, "class_time")
+      setOpenKomaList(
+        openKomaList.sort(function(a, b) {
           return a - b;
         })
       )
       
-      const openDatesObj = getDateClasstimeObj(classRoomDates)
-      setOpenDatesObj(openDatesObj)
+      const openDateKomaTable = getDateClasstimeObj(resData)
+      setOpenDateKomaTable(openDateKomaTable)
     })
   }, [])
 
@@ -53,15 +56,6 @@ export default function RegisterScreen() {
       newSelectIcons[objIdx] = !newSelectIcons[objIdx]
     }
     setSelectIcons(newSelectIcons)
-  }
-
-  // Todo Commonメソッドにする : DeleteScreen.js にも同じような処理がある
-  const getClassRoomId = (date, koma) => {
-    for(const classRoomDate of classDatesResponse){
-      if(classRoomDate.date === date && classRoomDate.class_time === koma){
-        return classRoomDate.id
-      }
-    }
   }
 
   const handleRegister = () => {
@@ -84,29 +78,29 @@ export default function RegisterScreen() {
               <TableRow>
                 <TableCell>授業日</TableCell>
                 {
-                  komaList.map((koma) => (
+                  openKomaList.map((koma) => (
                     <TableCell align="right" key={koma}>{koma}コマ目</TableCell>
                   ))
                 }
               </TableRow>
             </TableHead>
             <TableBody>
-              {classDates.map((date) => (
+              {openDateList.map((date) => (
                 <TableRow
                   key={date}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">{date}</TableCell>
                   {
-                    komaList.map((koma) => (
-                      openDatesObj[date] && openDatesObj[date].indexOf(koma) !== -1 ?
+                    openKomaList.map((koma) => (
+                      openDateKomaTable[date] && openDateKomaTable[date].indexOf(koma) !== -1 ?
                         <TableCell align="right" key={koma}>
-                          {selectIcons[getClassRoomId(date, koma)] ?
-                            <IconButton onClick={() => handleIconClick(getClassRoomId(date, koma))}>
+                          {selectIcons[getClassRoomId(openDateRes, date, koma)] ?
+                            <IconButton onClick={() => handleIconClick(getClassRoomId(openDateRes, date, koma))}>
                               <LensIcon />
                             </IconButton>
                           :
-                            <IconButton onClick={() => handleIconClick(getClassRoomId(date, koma))}>
+                            <IconButton onClick={() => handleIconClick(getClassRoomId(openDateRes, date, koma))}>
                               <CircleOutlinedIcon />
                             </IconButton>
                           }

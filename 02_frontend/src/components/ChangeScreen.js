@@ -1,9 +1,10 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
-import { fetchExistStudentDates, fetchStudentDates, getDateClasstimeObj } from '../methods/initprocess'
+import { fetchExistStudentDates, fetchStudentDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { updateDateToServer } from '../methods/requestProcess'
+import { getClassRoomId } from '../methods/commonProcess'
 
 export default function ChangeScreen() {
   // Todo : 状態変数の命名規則 決める
@@ -105,39 +106,19 @@ export default function ChangeScreen() {
   const handleUpdate = () => {
     const beforeClassIds = []
     for(let i=0; i < changeDate.length; i++){
-      let delClassId = getClassRoomId(changeDate[i], changeKoma[i])
+      let delClassId = getClassRoomId(classDatesResponse, changeDate[i], changeKoma[i])
       beforeClassIds.push(delClassId)
     }
 
     const afterClassIds = []
     for(let i=0; i < changeDate.length; i++){
-      let delClassId = getClassRoomIdAll(afterDate[i], afterKoma[i])
+      let delClassId = getClassRoomId(existDateResponse, afterDate[i], afterKoma[i])
       afterClassIds.push(delClassId)
     }
 
     updateDateToServer(1, beforeClassIds, afterClassIds)
     navigate("/")
   }
-
-
-  // Todo : この二つのメソッドは共通化処理にする //
-  const getClassRoomId = (date, koma) => {
-    for(const classRoomDate of classDatesResponse){
-      if(classRoomDate.date === date && classRoomDate.class_time === koma){
-        return classRoomDate.id
-      }
-    }
-  }
-
-  const getClassRoomIdAll = (date, koma) => {
-    for(const existDate of existDateResponse){
-      if(existDate.date === date && existDate.class_time === koma){
-        return existDate.id
-      }
-    }
-  }
-
-  //////////////////////////////////////////////////////
 
   return (
     // Todo 変更画面と似ているため、コンポーネント化する
