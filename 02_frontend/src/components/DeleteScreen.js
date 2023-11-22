@@ -1,32 +1,37 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
-import { fetchStudentDates, getDateClasstimeObj } from '../methods/initProcess'
+import { fetchDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { deleteDateToServer } from '../methods/requestProcess'
 import { getClassRoomId } from '../methods/commonProcess'
 
 export default function DeleteScreen() {
-  // Todo : 状態変数の命名規則 決める
   const [formCnt, setFormCnt] = useState([0])
+  
   const [delDate, setDelDate] = useState([])
   const [delKoma, setDelKoma] = useState([])
-  const [studentDatesObj, setStudentDatesObj] = useState({})
-  const [studentDatesOnly, setStudentDatesOnly] = useState([])
-  const [classDatesResponse, setClassDatesResponse] = useState({})
+
+  const [comeDateKomaTable, setComeDateKomaTable] = useState({})
+  const [comeDateList, setComeDateList] = useState([])
+  
+  const [comeDatesResponse, setComeDatesResponse] = useState({})
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    fetchStudentDates().then(studentDates => {
-      setClassDatesResponse(studentDates)
-      const studentDatesObj = getDateClasstimeObj(studentDates)
-      setStudentDatesObj(studentDatesObj)
+    const getComeDateParams = {
+      studentId: 1
+    }
+    fetchDates(getComeDateParams, "getComeDate").then(studentDates => {
+      setComeDatesResponse(studentDates)
+      const comeDateKomaTable = getDateClasstimeObj(studentDates)
+      setComeDateKomaTable(comeDateKomaTable)
 
       const dateList = []
-      for(const studentDate in studentDatesObj){
+      for(const studentDate in comeDateKomaTable){
         dateList.push(studentDate)
       }
-      setStudentDatesOnly(
+      setComeDateList(
         dateList.sort(function(a, b) {
           return a.localeCompare(b)
         })
@@ -34,6 +39,7 @@ export default function DeleteScreen() {
     })
   }, [])
 
+  // Todo : 共通処理にする ////////////////////////////////////
   const handleDateChange = (event, cnt) => {
     const newDelDate = [...delDate]
     if(newDelDate.length === cnt){
@@ -53,17 +59,20 @@ export default function DeleteScreen() {
     }
     setDelKoma(newDelKoma)
   }
+  ///////////////////////////////////////////////////////////////
 
+  // Todo : changeにもあるので共通処理にする
   const handleFormAdd = () => {
     const newFormCnt = [...formCnt]
     newFormCnt.push(newFormCnt.length)
     setFormCnt(newFormCnt)
   }
+  ////////////////////////////////////////////////////
 
   const handleDelete = () => {
     const deleteClassIds = []
     for(let i=0; i < delDate.length; i++){
-      let delClassId = getClassRoomId(classDatesResponse, delDate[i], delKoma[i])
+      let delClassId = getClassRoomId(comeDatesResponse, delDate[i], delKoma[i])
       deleteClassIds.push(delClassId)
     }
     deleteDateToServer(1, deleteClassIds)
@@ -88,7 +97,7 @@ export default function DeleteScreen() {
                 onChange={(event) => handleDateChange(event, cnt)}
               >
                 {
-                studentDatesOnly.map((studentDate) => (
+                comeDateList.map((studentDate) => (
                   <MenuItem value={studentDate} key={studentDate}>{studentDate}</MenuItem>
                 ))
                 }
@@ -106,8 +115,8 @@ export default function DeleteScreen() {
                 onChange={(event) => handleKomaChange(event, cnt)}
               >
                 {
-                  studentDatesObj[delDate[cnt]] ?
-                    studentDatesObj[delDate[cnt]].map((koma) => (
+                  comeDateKomaTable[delDate[cnt]] ?
+                    comeDateKomaTable[delDate[cnt]].map((koma) => (
                       <MenuItem value={koma} key={koma}>{koma}</MenuItem>
                     ))
                   :

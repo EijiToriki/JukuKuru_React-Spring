@@ -1,54 +1,63 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
-import { fetchExistStudentDates, fetchStudentDates, getDateClasstimeObj } from '../methods/initProcess'
+import { fetchDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { updateDateToServer } from '../methods/requestProcess'
 import { getClassRoomId } from '../methods/commonProcess'
 
 export default function ChangeScreen() {
-  // Todo : 状態変数の命名規則 決める
   const [formCnt, setFormCnt] = useState([0])
-  const [changeDate, setChangeDate] = useState([])
-  const [changeKoma, setChangeKoma] = useState([])
+  const [beforeDate, setBeforeDate] = useState([])
+  const [beforeKoma, setBeforeKoma] = useState([])
   const [afterDate, setAfterDate] = useState([])
   const [afterKoma, setAfterKoma] = useState([])
 
-  const [studentDatesObj, setStudentDatesObj] = useState({})
-  const [studentDatesOnly, setStudentDatesOnly] = useState([])
-  const [existStudentDatesObj, setExistStudentDatesObj] = useState({})
-  const [existStudentDatesOnly, setExistStudentDatesOnly] = useState([])
-  const [classDatesResponse, setClassDatesResponse] = useState({})
-  const [existDateResponse, setExsitDateResponse] = useState({})
+  const [comeDateKomaTable, setComeDateKomaTable] = useState({})
+  const [comeDateList, setComeDateList] = useState([])
+
+  const [selectableDateKomaTable, setSelectableDateKomaTable] = useState({})
+  const [selectableDateList, setSelectableDateList] = useState([])
+  
+  const [comeDatesResponse, setComeDatesResponse] = useState({})
+  const [selectableDatesResponse, setSelectableDatesResponse] = useState({})
+
   const navigate = useNavigate()
 
   React.useEffect(() => {
-    fetchStudentDates().then(studentDates => {
-      setClassDatesResponse(studentDates)
-      const studentDatesObj = getDateClasstimeObj(studentDates)
-      setStudentDatesObj(studentDatesObj)
+    const getComeDateParams = {
+      studentId: 1
+    }
+    fetchDates(getComeDateParams, "getComeDate").then(studentDates => {
+      setComeDatesResponse(studentDates)
+      const comeDateKomaTable = getDateClasstimeObj(studentDates)
+      setComeDateKomaTable(comeDateKomaTable)
 
       const dateList = []
-      for(const studentDate in studentDatesObj){
+      for(const studentDate in comeDateKomaTable){
         dateList.push(studentDate)
       }
-      setStudentDatesOnly(
+      setComeDateList(
         dateList.sort(function(a, b) {
           return a.localeCompare(b)
         })
       )
     })
 
-    fetchExistStudentDates().then(existDates => {
-      setExsitDateResponse(existDates)
-      const existStudentDatesObj = getDateClasstimeObj(existDates)
-      setExistStudentDatesObj(existStudentDatesObj)
+    const getOptionalDateparams = {
+      studentId: 1,
+      classroomId: 1
+    }
+    fetchDates(getOptionalDateparams, "getOptionalDate").then(existDates => {
+      setSelectableDatesResponse(existDates)
+      const selectableDateKomaTable = getDateClasstimeObj(existDates)
+      setSelectableDateKomaTable(selectableDateKomaTable)
 
       const dateList = []
-      for(const existDate in existStudentDatesObj){
+      for(const existDate in selectableDateKomaTable){
         dateList.push(existDate)
       }
-      setExistStudentDatesOnly(
+      setSelectableDateList(
         dateList.sort(function(a, b) {
           return a.localeCompare(b)
         })
@@ -56,14 +65,15 @@ export default function ChangeScreen() {
     })
   }, [])
 
+  // Todo : 共通処理にする //////////////////////////////
   const handleDateChange = (event, cnt) => {
-    const newChangeDate = [...changeDate]
+    const newChangeDate = [...beforeDate]
     if(newChangeDate.length === cnt){
       newChangeDate.push(event.target.value)
     }else{
       newChangeDate[cnt] = event.target.value
     }
-    setChangeDate(newChangeDate)
+    setBeforeDate(newChangeDate)
   }
 
   const handleAfterDateChange = (event, cnt) => {
@@ -77,13 +87,13 @@ export default function ChangeScreen() {
   }
 
   const handleKomaChange = (event, cnt) => {
-    const newChangeKoma = [...changeKoma]
+    const newChangeKoma = [...beforeKoma]
     if(newChangeKoma.length === cnt){
       newChangeKoma.push(event.target.value)
     }else{
       newChangeKoma[cnt] = event.target.value
     }
-    setChangeKoma(newChangeKoma)
+    setBeforeKoma(newChangeKoma)
   }
 
   const handleAfterKomaChange = (event, cnt) => {
@@ -96,23 +106,26 @@ export default function ChangeScreen() {
     }
     setAfterKoma(newAfterKoma)
   }
+  /////////////////////////////////////////////////////
 
+  // Todo : delete にもあるので共通処理にする
   const handleFormAdd = () => {
     const newFormCnt = [...formCnt]
     newFormCnt.push(newFormCnt.length)
     setFormCnt(newFormCnt)
   }
+  ////////////////////////////////////////////////
 
   const handleUpdate = () => {
     const beforeClassIds = []
-    for(let i=0; i < changeDate.length; i++){
-      let delClassId = getClassRoomId(classDatesResponse, changeDate[i], changeKoma[i])
+    for(let i=0; i < beforeDate.length; i++){
+      let delClassId = getClassRoomId(comeDatesResponse, beforeDate[i], beforeKoma[i])
       beforeClassIds.push(delClassId)
     }
 
     const afterClassIds = []
-    for(let i=0; i < changeDate.length; i++){
-      let delClassId = getClassRoomId(existDateResponse, afterDate[i], afterKoma[i])
+    for(let i=0; i < beforeDate.length; i++){
+      let delClassId = getClassRoomId(selectableDatesResponse, afterDate[i], afterKoma[i])
       afterClassIds.push(delClassId)
     }
 
@@ -135,12 +148,12 @@ export default function ChangeScreen() {
                   <Select
                     labelId="delete-dates"
                     id="delete-date"
-                    value={changeDate[cnt]}
+                    value={beforeDate[cnt]}
                     label="date"
                     onChange={(event) => handleDateChange(event, cnt)}
                   >
                     {
-                    studentDatesOnly.map((studentDate) => (
+                    comeDateList.map((studentDate) => (
                       <MenuItem value={studentDate} key={studentDate}>{studentDate}</MenuItem>
                     ))
                     }
@@ -158,8 +171,8 @@ export default function ChangeScreen() {
                     onChange={(event) => handleKomaChange(event, cnt)}
                   >
                     {
-                      studentDatesObj[changeDate[cnt]] ?
-                        studentDatesObj[changeDate[cnt]].map((koma) => (
+                      comeDateKomaTable[beforeDate[cnt]] ?
+                        comeDateKomaTable[beforeDate[cnt]].map((koma) => (
                           <MenuItem value={koma} key={koma}>{koma}</MenuItem>
                         ))
                       :
@@ -185,7 +198,7 @@ export default function ChangeScreen() {
                     onChange={(event) => handleAfterDateChange(event, cnt)}
                   >
                     {
-                    existStudentDatesOnly.map((studentDate) => (
+                    selectableDateList.map((studentDate) => (
                       <MenuItem value={studentDate} key={studentDate}>{studentDate}</MenuItem>
                     ))
                     }
@@ -203,8 +216,8 @@ export default function ChangeScreen() {
                     onChange={(event) => handleAfterKomaChange(event, cnt)}
                   >
                     {
-                      existStudentDatesObj[afterDate[cnt]] ?
-                      existStudentDatesObj[afterDate[cnt]].map((koma) => (
+                      selectableDateKomaTable[afterDate[cnt]] ?
+                      selectableDateKomaTable[afterDate[cnt]].map((koma) => (
                           <MenuItem value={koma} key={koma}>{koma}</MenuItem>
                         ))
                       :
