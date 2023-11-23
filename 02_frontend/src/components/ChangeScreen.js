@@ -1,10 +1,12 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
+import { FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
 import { fetchDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { updateDateToServer } from '../methods/requestProcess'
-import { getClassRoomId } from '../methods/commonProcess'
+import { getClassRoomId, handleSelectBoxChange } from '../methods/commonProcess'
+import FormAddButton from '../common/FormAddButton'
+import BusinessImplButton from '../common/BusinessImplButton'
 
 export default function ChangeScreen() {
   const [formCnt, setFormCnt] = useState([0])
@@ -65,57 +67,6 @@ export default function ChangeScreen() {
     })
   }, [])
 
-  // Todo : 共通処理にする //////////////////////////////
-  const handleDateChange = (event, cnt) => {
-    const newChangeDate = [...beforeDate]
-    if(newChangeDate.length === cnt){
-      newChangeDate.push(event.target.value)
-    }else{
-      newChangeDate[cnt] = event.target.value
-    }
-    setBeforeDate(newChangeDate)
-  }
-
-  const handleAfterDateChange = (event, cnt) => {
-    const newAfterDate = [...afterDate]
-    if(newAfterDate.length === cnt){
-      newAfterDate.push(event.target.value)
-    }else{
-      newAfterDate[cnt] = event.target.value
-    }
-    setAfterDate(newAfterDate)
-  }
-
-  const handleKomaChange = (event, cnt) => {
-    const newChangeKoma = [...beforeKoma]
-    if(newChangeKoma.length === cnt){
-      newChangeKoma.push(event.target.value)
-    }else{
-      newChangeKoma[cnt] = event.target.value
-    }
-    setBeforeKoma(newChangeKoma)
-  }
-
-  const handleAfterKomaChange = (event, cnt) => {
-    console.log(event.target.value)
-    const newAfterKoma = [...afterKoma]
-    if(newAfterKoma.length === cnt){
-      newAfterKoma.push(event.target.value)
-    }else{
-      newAfterKoma[cnt] = event.target.value
-    }
-    setAfterKoma(newAfterKoma)
-  }
-  /////////////////////////////////////////////////////
-
-  // Todo : delete にもあるので共通処理にする
-  const handleFormAdd = () => {
-    const newFormCnt = [...formCnt]
-    newFormCnt.push(newFormCnt.length)
-    setFormCnt(newFormCnt)
-  }
-  ////////////////////////////////////////////////
-
   const handleUpdate = () => {
     const beforeClassIds = []
     for(let i=0; i < beforeDate.length; i++){
@@ -134,7 +85,7 @@ export default function ChangeScreen() {
   }
 
   return (
-    // Todo 変更画面と似ているため、コンポーネント化する
+    // Todo 93～136, 138～181 似ているのでコンポーネント化する
     <Grid container spacing={2} width="80%" margin="auto">
       {
       formCnt.map((cnt) => (
@@ -144,13 +95,13 @@ export default function ChangeScreen() {
               <p>変更前日時</p>
               <Grid item xs={10}>
                 <FormControl fullWidth>
-                  <InputLabel id="delete-dates">来塾日</InputLabel>
+                  <InputLabel id="before-dates">来塾日</InputLabel>
                   <Select
-                    labelId="delete-dates"
-                    id="delete-date"
+                    labelId="before-dates"
+                    id="before-date"
                     value={beforeDate[cnt]}
                     label="date"
-                    onChange={(event) => handleDateChange(event, cnt)}
+                    onChange={(event) => handleSelectBoxChange(event, cnt, beforeDate, setBeforeDate)}
                   >
                     {
                     comeDateList.map((studentDate) => (
@@ -163,12 +114,12 @@ export default function ChangeScreen() {
 
               <Grid item xs={4} marginTop='2%'>
                 <FormControl fullWidth>
-                  <InputLabel id="delete-komas">コマ</InputLabel>
+                  <InputLabel id="before-komas">コマ</InputLabel>
                   <Select
-                    labelId="delete-komas"
-                    id="delete-koma"
+                    labelId="before-komas"
+                    id="before-koma"
                     label="koma"
-                    onChange={(event) => handleKomaChange(event, cnt)}
+                    onChange={(event) => handleSelectBoxChange(event, cnt, beforeKoma, setBeforeKoma)}
                   >
                     {
                       comeDateKomaTable[beforeDate[cnt]] ?
@@ -189,13 +140,13 @@ export default function ChangeScreen() {
               <p>変更後日時</p>
               <Grid item xs={10}>
                 <FormControl fullWidth>
-                  <InputLabel id="delete-dates">来塾日</InputLabel>
+                  <InputLabel id="after-dates">来塾日</InputLabel>
                   <Select
-                    labelId="delete-dates"
-                    id="delete-date"
+                    labelId="after-dates"
+                    id="after-date"
                     value={afterDate[cnt]}
                     label="date"
-                    onChange={(event) => handleAfterDateChange(event, cnt)}
+                    onChange={(event) => handleSelectBoxChange(event, cnt, afterDate, setAfterDate)}
                   >
                     {
                     selectableDateList.map((studentDate) => (
@@ -208,12 +159,12 @@ export default function ChangeScreen() {
 
               <Grid item xs={4} marginTop='2%'>
                 <FormControl fullWidth>
-                  <InputLabel id="delete-komas">コマ</InputLabel>
+                  <InputLabel id="after-komas">コマ</InputLabel>
                   <Select
-                    labelId="delete-komas"
-                    id="delete-koma"
+                    labelId="after-komas"
+                    id="after-koma"
                     label="koma"
-                    onChange={(event) => handleAfterKomaChange(event, cnt)}
+                    onChange={(event) => handleSelectBoxChange(event, cnt, afterKoma, setAfterKoma)}
                   >
                     {
                       selectableDateKomaTable[afterDate[cnt]] ?
@@ -233,14 +184,10 @@ export default function ChangeScreen() {
       }
       
       <Grid item xs={10} marginTop="1%" alignItems="right" marginBottom="2%">
-        <Box flexDirection="row" justifyContent="flex-end" display="flex">
-          <Button variant="contained" color="primary" onClick={handleUpdate}>登録</Button>
-        </Box>
+        <BusinessImplButton businessFunction={handleUpdate} buttonStr="登録"/>
       </Grid>
       <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
-        <Box flexDirection="row" justifyContent="flex-end" display="flex">
-          <Button variant="contained" color="success" onClick={handleFormAdd}>追加</Button>
-        </Box>
+        <FormAddButton formCnt={formCnt} setFormCnt={setFormCnt} />
       </Grid>
       <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
         <BackButton />

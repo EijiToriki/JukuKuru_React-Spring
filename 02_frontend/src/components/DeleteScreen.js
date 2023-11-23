@@ -1,10 +1,12 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
+import { FormControl, Grid, InputLabel, MenuItem, Paper, Select } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
 import { fetchDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { deleteDateToServer } from '../methods/requestProcess'
-import { getClassRoomId } from '../methods/commonProcess'
+import { getClassRoomId, handleSelectBoxChange } from '../methods/commonProcess'
+import FormAddButton from '../common/FormAddButton'
+import BusinessImplButton from '../common/BusinessImplButton'
 
 export default function DeleteScreen() {
   const [formCnt, setFormCnt] = useState([0])
@@ -39,35 +41,6 @@ export default function DeleteScreen() {
     })
   }, [])
 
-  // Todo : 共通処理にする ////////////////////////////////////
-  const handleDateChange = (event, cnt) => {
-    const newDelDate = [...delDate]
-    if(newDelDate.length === cnt){
-      newDelDate.push(event.target.value)
-    }else{
-      newDelDate[cnt] = event.target.value
-    }
-    setDelDate(newDelDate)
-  }
-
-  const handleKomaChange = (event, cnt) => {
-    const newDelKoma = [...delKoma]
-    if(newDelKoma.length === cnt){
-      newDelKoma.push(event.target.value)
-    }else{
-      newDelKoma[cnt] = event.target.value
-    }
-    setDelKoma(newDelKoma)
-  }
-  ///////////////////////////////////////////////////////////////
-
-  // Todo : changeにもあるので共通処理にする
-  const handleFormAdd = () => {
-    const newFormCnt = [...formCnt]
-    newFormCnt.push(newFormCnt.length)
-    setFormCnt(newFormCnt)
-  }
-  ////////////////////////////////////////////////////
 
   const handleDelete = () => {
     const deleteClassIds = []
@@ -94,7 +67,7 @@ export default function DeleteScreen() {
                 id="delete-date"
                 value={delDate[cnt]}
                 label="date"
-                onChange={(event) => handleDateChange(event, cnt)}
+                onChange={(event) => handleSelectBoxChange(event, cnt, delDate, setDelDate)}
               >
                 {
                 comeDateList.map((studentDate) => (
@@ -112,7 +85,7 @@ export default function DeleteScreen() {
                 labelId="delete-komas"
                 id="delete-koma"
                 label="koma"
-                onChange={(event) => handleKomaChange(event, cnt)}
+                onChange={(event) => handleSelectBoxChange(event, cnt, delKoma, setDelKoma)}
               >
                 {
                   comeDateKomaTable[delDate[cnt]] ?
@@ -130,14 +103,10 @@ export default function DeleteScreen() {
       }
       
       <Grid item xs={10} marginTop="1%" alignItems="right" marginBottom="2%">
-        <Box flexDirection="row" justifyContent="flex-end" display="flex">
-          <Button variant="contained" color="primary" onClick={handleDelete}>登録</Button>
-        </Box>
+        <BusinessImplButton businessFunction={handleDelete} buttonStr="削除"/>
       </Grid>
       <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
-        <Box flexDirection="row" justifyContent="flex-end" display="flex">
-          <Button variant="contained" color="success" onClick={handleFormAdd}>追加</Button>
-        </Box>
+        <FormAddButton formCnt={formCnt} setFormCnt={setFormCnt} />
       </Grid>
       <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
         <BackButton />
