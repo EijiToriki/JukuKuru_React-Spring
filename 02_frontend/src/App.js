@@ -6,6 +6,7 @@ import RegisterScreen from './components/RegisterScreen';
 import InquiryScreen from './components/InquiryScreen';
 import ChangeScreen from './components/ChangeScreen';
 import DeleteScreen from './components/DeleteScreen';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Header />
       <Routes>
         <Route exact path="/" element={<Menu />} />
+        <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<RegisterScreen />} />
         <Route exact path="/inquiry" element={<InquiryScreen />} />
         <Route exact path="/change" element={<ChangeScreen />} />
