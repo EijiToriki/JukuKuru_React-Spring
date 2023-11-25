@@ -18,9 +18,12 @@ export default function InquiryScreen() {
   const [openKomaList, setOpenKomaList] = React.useState([])
   const [comeDateKomaTable, setComeDateKomaTable] = React.useState({})
 
+  const studentId = localStorage.getItem("stundentId")
+  const classroomId = localStorage.getItem("classroomId")
+
   React.useEffect(() => {
     const getOpenDateParams = {
-      classroomId: 1
+      classroomId: classroomId
     }
     fetchDates(getOpenDateParams, "getOpenDate").then(classRoomDates => {
       const dateList = getClassRoomPropList(classRoomDates, "date")
@@ -39,8 +42,9 @@ export default function InquiryScreen() {
     })
 
     const getComeDateParams = {
-      studentId: 1
+      studentId: studentId
     }
+    // Todo : データないときにバグるのでエラー処理を
     fetchDates(getComeDateParams, "getComeDate").then(studentDates => {
       const comeDateKomaTable = getDateClasstimeObj(studentDates)
       setComeDateKomaTable(comeDateKomaTable)

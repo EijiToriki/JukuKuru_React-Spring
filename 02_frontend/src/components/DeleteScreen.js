@@ -21,9 +21,11 @@ export default function DeleteScreen() {
   const [comeDatesResponse, setComeDatesResponse] = useState({})
   const navigate = useNavigate()
 
+  const studentId = localStorage.getItem("stundentId")
+
   React.useEffect(() => {
     const getComeDateParams = {
-      studentId: 1
+      studentId: studentId
     }
     fetchDates(getComeDateParams, "getComeDate").then(studentDates => {
       setComeDatesResponse(studentDates)
@@ -49,8 +51,8 @@ export default function DeleteScreen() {
       let delClassId = getClassRoomId(comeDatesResponse, delDate[i], delKoma[i])
       deleteClassIds.push(delClassId)
     }
-    deleteDateToServer(1, deleteClassIds)
-    navigate("/")
+    deleteDateToServer(studentId, deleteClassIds)
+    navigate("/menu")
   }
 
   

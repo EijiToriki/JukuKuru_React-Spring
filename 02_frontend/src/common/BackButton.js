@@ -6,7 +6,7 @@ export default function BackButton() {
   const navigate = useNavigate()
 
   const backTopPage = () =>{
-    navigate("/")  
+    navigate("/menu")  
   }
 
   return (

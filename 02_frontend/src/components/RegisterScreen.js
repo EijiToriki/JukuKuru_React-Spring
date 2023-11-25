@@ -23,9 +23,12 @@ export default function RegisterScreen() {
   const [selectIcons, setSelectIcons] = React.useState({});
   const navigate = useNavigate()
 
+  const studentId = localStorage.getItem("stundentId")
+  const classroomId = localStorage.getItem("classroomId")
+
   React.useEffect(() => {
     const params = {
-      classroomId: 1
+      classroomId: classroomId
     }
     fetchDates(params, "getOpenDate").then(resData => {
       setOpenDateRes(resData)
@@ -65,8 +68,8 @@ export default function RegisterScreen() {
         postClassIds.push(selectIconId)
       }
     }
-    registerDateToServer(1, postClassIds)
-    navigate("/")
+    registerDateToServer(studentId, postClassIds)
+    navigate("/menu")
   }
 
   return (

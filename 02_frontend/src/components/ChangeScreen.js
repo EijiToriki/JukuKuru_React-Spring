@@ -27,9 +27,12 @@ export default function ChangeScreen() {
 
   const navigate = useNavigate()
 
+  const studentId = localStorage.getItem("stundentId")
+  const classroomId = localStorage.getItem("classroomId")
+
   React.useEffect(() => {
     const getComeDateParams = {
-      studentId: 1
+      studentId: studentId
     }
     fetchDates(getComeDateParams, "getComeDate").then(studentDates => {
       setComeDatesResponse(studentDates)
@@ -48,8 +51,8 @@ export default function ChangeScreen() {
     })
 
     const getOptionalDateparams = {
-      studentId: 1,
-      classroomId: 1
+      studentId: studentId,
+      classroomId: classroomId
     }
     fetchDates(getOptionalDateparams, "getOptionalDate").then(existDates => {
       setSelectableDatesResponse(existDates)
@@ -82,7 +85,7 @@ export default function ChangeScreen() {
     }
 
     updateDateToServer(1, beforeClassIds, afterClassIds)
-    navigate("/")
+    navigate("/menu")
   }
 
   return (

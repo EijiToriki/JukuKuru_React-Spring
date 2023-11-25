@@ -13,8 +13,8 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route exact path="/" element={<Menu />} />
-        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/menu" element={<Menu />} />
         <Route exact path="/register" element={<RegisterScreen />} />
         <Route exact path="/inquiry" element={<InquiryScreen />} />
         <Route exact path="/change" element={<ChangeScreen />} />
