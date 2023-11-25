@@ -12,7 +12,4 @@ public class StudentEntity {
     private long teacher_id;
     private long classroom_id;
     private String name;
-    private String loginID;
-    private String password;
-    private List<ClassEntity> classes;
 }

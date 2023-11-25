@@ -1,6 +1,7 @@
 package com.jukukuru.crs.service;
 
 import com.jukukuru.crs.entity.ClassEntity;
+import com.jukukuru.crs.entity.StudentEntity;
 import com.jukukuru.crs.repository.ClassroomRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,23 @@ import java.util.Map;
 public class ClassroomService {
 
     public final ClassroomRepositoryImpl classroomRepository;
+
+    public StudentEntity findByIdPassword(String login_id, String password){
+        List<Map<String, Object>> queryResult = classroomRepository.findByIdPassword(login_id, password);
+
+        if(queryResult.size() == 1){
+            Map<String, Object> studentInfo = queryResult.get(0);
+            StudentEntity studentEntity = new StudentEntity(
+                    (int) studentInfo.get("id"),
+                    (int) studentInfo.get("teacher_id"),
+                    (int) studentInfo.get("classroom_id"),
+                    (String) studentInfo.get("name")
+            );
+            return studentEntity;
+        }else{
+            return null;
+        }
+    }
 
     public List<ClassEntity> findByClassroomId(int classroomId){
         List<Map<String, Object>> queryResult = classroomRepository.findByClassroomId(classroomId);

@@ -21,7 +21,7 @@ export default function DeleteScreen() {
   const [comeDatesResponse, setComeDatesResponse] = useState({})
   const navigate = useNavigate()
 
-  const studentId = localStorage.getItem("stundentId")
+  const studentId = localStorage.getItem("studentId")
 
   React.useEffect(() => {
     const getComeDateParams = {

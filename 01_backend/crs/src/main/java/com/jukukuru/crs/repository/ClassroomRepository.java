@@ -1,5 +1,6 @@
 package com.jukukuru.crs.repository;
 
+import com.jukukuru.crs.entity.StudentEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Map;
 
 @Repository
 public interface ClassroomRepository {
+
+    List<Map<String, Object>> findByIdPassword(String login_id, String password);
 
     List<Map<String, Object>> findByClassroomId(int classroomId);
 

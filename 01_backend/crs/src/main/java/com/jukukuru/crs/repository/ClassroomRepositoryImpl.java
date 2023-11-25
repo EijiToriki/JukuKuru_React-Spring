@@ -14,6 +14,16 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public List<Map<String, Object>> findByIdPassword(String login_id, String password){
+        String sql = "" +
+                "SELECT " + "* " + "FROM " + "student " +
+                "WHERE login_id = '" + login_id + "' AND password = '" + password + "';";
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+
+        return result;
+    }
+
+    @Override
     public List findByClassroomId(int classroomId) {
         String sql = "" +
                 "SELECT " +

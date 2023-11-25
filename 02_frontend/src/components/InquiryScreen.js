@@ -18,7 +18,7 @@ export default function InquiryScreen() {
   const [openKomaList, setOpenKomaList] = React.useState([])
   const [comeDateKomaTable, setComeDateKomaTable] = React.useState({})
 
-  const studentId = localStorage.getItem("stundentId")
+  const studentId = localStorage.getItem("studentId")
   const classroomId = localStorage.getItem("classroomId")
 
   React.useEffect(() => {

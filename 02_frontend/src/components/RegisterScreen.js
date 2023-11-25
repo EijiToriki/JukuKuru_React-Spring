@@ -23,7 +23,7 @@ export default function RegisterScreen() {
   const [selectIcons, setSelectIcons] = React.useState({});
   const navigate = useNavigate()
 
-  const studentId = localStorage.getItem("stundentId")
+  const studentId = localStorage.getItem("studentId")
   const classroomId = localStorage.getItem("classroomId")
 
   React.useEffect(() => {
@@ -68,6 +68,8 @@ export default function RegisterScreen() {
         postClassIds.push(selectIconId)
       }
     }
+    console.log(studentId)
+    console.log(postClassIds)
     registerDateToServer(studentId, postClassIds)
     navigate("/menu")
   }

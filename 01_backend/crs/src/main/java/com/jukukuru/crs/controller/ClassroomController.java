@@ -1,6 +1,7 @@
 package com.jukukuru.crs.controller;
 
 import com.jukukuru.crs.entity.ClassEntity;
+import com.jukukuru.crs.entity.StudentEntity;
 import com.jukukuru.crs.requestData.*;
 import com.jukukuru.crs.service.ClassroomService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ import java.util.List;
 public class ClassroomController {
 
     private final ClassroomService classroomService;
+
+    @GetMapping("/getStudentInfo")
+    public StudentEntity getStudentInfo(@RequestParam String login_id, String password){
+        return classroomService.findByIdPassword(login_id, password);
+    }
 
     @GetMapping("/getOpenDate")
     public List<ClassEntity> getOpenDate(@RequestParam int classroomId){
@@ -59,7 +65,6 @@ public class ClassroomController {
     public int deleteComeDate(@RequestBody DeleteDateRequest deleteDateRequest){
         int studentId = deleteDateRequest.getStudentId();
         List<Integer> deleteClassIds = deleteDateRequest.getDeleteClassIds();
-        System.out.println(deleteClassIds);
         return classroomService.deleteDatesByStudentId(studentId, deleteClassIds);
     }
 

@@ -14,11 +14,13 @@ const getClassRoomPropList = (classRoomDates, keyName) => {
 
 const getDateClasstimeObj = (dateClasstimeProps) => {
   const dateClasstimeObj = {}
-  for (const dateClasstime of dateClasstimeProps) {
-    if (!dateClasstimeObj[dateClasstime.date]) {
-      dateClasstimeObj[dateClasstime.date] = [];
+  if(dateClasstimeProps){
+    for (const dateClasstime of dateClasstimeProps) {
+      if (!dateClasstimeObj[dateClasstime.date]) {
+        dateClasstimeObj[dateClasstime.date] = [];
+      }
+      dateClasstimeObj[dateClasstime.date].push(dateClasstime.class_time);
     }
-    dateClasstimeObj[dateClasstime.date].push(dateClasstime.class_time);
   }
   return dateClasstimeObj
 }

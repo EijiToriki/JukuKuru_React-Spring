@@ -27,7 +27,7 @@ export default function ChangeScreen() {
 
   const navigate = useNavigate()
 
-  const studentId = localStorage.getItem("stundentId")
+  const studentId = localStorage.getItem("studentId")
   const classroomId = localStorage.getItem("classroomId")
 
   React.useEffect(() => {
@@ -84,7 +84,7 @@ export default function ChangeScreen() {
       afterClassIds.push(delClassId)
     }
 
-    updateDateToServer(1, beforeClassIds, afterClassIds)
+    updateDateToServer(studentId, beforeClassIds, afterClassIds)
     navigate("/menu")
   }
 
