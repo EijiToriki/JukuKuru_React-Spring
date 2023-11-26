@@ -101,11 +101,28 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
 
     @Override
     public int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds){
+//        String query = """
+//                DELETE FROM class_management
+//                WHERE class_id = ? AND student_id = ?;
+//                """;
         String query = """
-                DELETE FROM class_management
-                WHERE class_id = ? AND student_id = ?;
+                    DELETE FROM class_management
+                    WHERE (class_id = 
                 """;
-        return executeInsertOrDeleteQuery(query, deleteClassIds, studentId);
+
+        for(Integer classId : deleteClassIds){
+            query += (classId + " OR class_id = ");
+        }
+        query += " 0) AND student_id =  " + studentId + ";";
+
+        int result = jdbcTemplate.update(query);
+        if(result >= 1){
+            return 0;
+        }else{
+            return 9;
+        }
+
+//        return executeInsertOrDeleteQuery(query, deleteClassIds, studentId);
     }
 
 
