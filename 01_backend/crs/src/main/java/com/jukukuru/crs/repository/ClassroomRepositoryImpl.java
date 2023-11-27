@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
 
@@ -144,11 +145,27 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
         List<Integer> beforeClassIds,
         List<Integer> afterClassIds
     ){
+//        String query = """
+//                UPDATE class_management SET class_id = ?
+//                WHERE class_id = ? AND student_id = ?;
+//                """;
+
+
+        String beforeClassIdsString = beforeClassIds.stream().map(Object::toString).collect((Collectors.joining(",")));
+        String afterClassIdsString = afterClassIds.stream().map(Object::toString).collect((Collectors.joining(",")));
+
         String query = """
-                UPDATE class_management SET class_id = ?
-                WHERE class_id = ? AND student_id = ?;
-                """;
-        return executeUpdateQuery(query, studentId, beforeClassIds, afterClassIds);
+                UPDATE class_management SET
+                class_id = ELT(FIELD(class_id, %s), %s),
+                WHERE class_id IN (%s) AND student_id = %s;
+                """.formatted(beforeClassIdsString, afterClassIdsString, beforeClassIdsString, studentId);
+        int result = jdbcTemplate.update(query);
+        if(result >= 1){
+            return 0;
+        }else{
+            return 9;
+        }
+//        return executeUpdateQuery(query, studentId, beforeClassIds, afterClassIds);
     }
 
 
