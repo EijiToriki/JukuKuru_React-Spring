@@ -90,22 +90,23 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
     }
 
 
+    // Todo : クエリの組み立てが分かりにくい：プレースホルダ使ったやり方
     @Override
     public int registerDatesByStudentId(int studentId, List<Integer> classIds){
         String query = """
                     INSERT INTO class_management(class_id, student_id)
-                    VALUES(?, ?)
+                    VALUES
                     """;
-        return executeInsertOrDeleteQuery(query, classIds, studentId);
-    }
+        for(int i=0; i < classIds.size()-1; i++) {
+            query += "(" + classIds.get(i) + ", " + studentId + "), ";
+        }
+        query += "(" + classIds.get(classIds.size()-1) + ", " + studentId + "); ";
 
+        return judgeQuery(query);
+    }
 
     @Override
     public int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds){
-//        String query = """
-//                DELETE FROM class_management
-//                WHERE class_id = ? AND student_id = ?;
-//                """;
         String query = """
                     DELETE FROM class_management
                     WHERE (class_id = 
@@ -116,28 +117,8 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
         }
         query += " 0) AND student_id =  " + studentId + ";";
 
-        int result = jdbcTemplate.update(query);
-        if(result >= 1){
-            return 0;
-        }else{
-            return 9;
-        }
-
-//        return executeInsertOrDeleteQuery(query, deleteClassIds, studentId);
+        return judgeQuery(query);
     }
-
-
-    private int executeInsertOrDeleteQuery(String query, List<Integer> classIds, int studentId){
-        for(Integer classId : classIds) {
-            int result = jdbcTemplate.update(query, classId, studentId);
-            // 1行の更新でない場合、異常終了
-            if(result != 1){
-                return 9;
-            }
-        }
-        return 0;
-    }
-
 
     @Override
     public int updateDatesByStudentId(
@@ -145,47 +126,33 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
         List<Integer> beforeClassIds,
         List<Integer> afterClassIds
     ){
-//        String query = """
-//                UPDATE class_management SET class_id = ?
-//                WHERE class_id = ? AND student_id = ?;
-//                """;
-
-
-        String beforeClassIdsString = beforeClassIds.stream().map(Object::toString).collect((Collectors.joining(",")));
-        String afterClassIdsString = afterClassIds.stream().map(Object::toString).collect((Collectors.joining(",")));
-
         String query = """
                 UPDATE class_management SET
-                class_id = ELT(FIELD(class_id, %s), %s),
-                WHERE class_id IN (%s) AND student_id = %s;
-                """.formatted(beforeClassIdsString, afterClassIdsString, beforeClassIdsString, studentId);
+                class_id = CASE class_id
+                """;
+        for(int i=0; i < beforeClassIds.size(); i++){
+            query += ("WHEN " + beforeClassIds.get(i) + " THEN " + afterClassIds.get(i) +"\n");
+        }
+        query += "END\nWHERE class_id IN (";
+
+        for(int i=0; i < beforeClassIds.size()-1; i++){
+            query += (beforeClassIds.get(i) + ", ");
+        }
+        query += (beforeClassIds.get(beforeClassIds.size()-1) + ") AND student_id = " + studentId + ";");
+
+        return judgeQuery(query);
+    }
+
+
+    public int judgeQuery(String query){
         int result = jdbcTemplate.update(query);
         if(result >= 1){
             return 0;
         }else{
             return 9;
         }
-//        return executeUpdateQuery(query, studentId, beforeClassIds, afterClassIds);
     }
 
 
-    public int executeUpdateQuery(
-        String query,
-        int studentId,
-        List<Integer> beforeClassIds,
-        List<Integer> afterClassIds
-    ){
-        for(int i=0; i<beforeClassIds.size(); i++) {
-            Integer beforeClassId = beforeClassIds.get(i);
-            Integer afterClassId = afterClassIds.get(i);
-            int result = jdbcTemplate.update(query, afterClassId, beforeClassId, studentId);
-            // 1行の更新でない場合、異常終了
-            if(result != 1){
-                return 9;
-            }
-        }
-        return 0;
-
-    }
 
 }
