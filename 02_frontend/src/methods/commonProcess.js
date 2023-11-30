@@ -49,4 +49,30 @@ const handleFormAdd = (formCnt, setFormCnt) => {
   setFormCnt(newFormCnt)
 }
 
-export { getClassRoomId, handleSelectBoxChange, handleFormAdd }
+/*
+更新・削除画面にて、更新・削除ボタンを押されたときのエラーチェックをする関数
+
+dateList : 日にちのリスト
+komaList : コマのリスト
+*/
+const errorCheck = (dateList, komaList) => {
+  if(dateList.length === 0){
+    return false
+  }
+  if(dateList.length !== komaList.length){
+    return false
+  }
+  for(let i=0; i<dateList.length; i++){
+    for(let j=i+1; j<dateList.length; j++){
+      if(dateList[i] === dateList[j] && komaList[i] === komaList[j]){
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
+
+
+export { getClassRoomId, handleSelectBoxChange, handleFormAdd, errorCheck }

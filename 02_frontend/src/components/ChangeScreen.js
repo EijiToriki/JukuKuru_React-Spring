@@ -1,15 +1,16 @@
-import { Grid } from '@mui/material'
+import { Alert, Grid } from '@mui/material'
 import React, { useState } from 'react'
 import BackButton from '../common/BackButton'
 import { fetchDates, getDateClasstimeObj } from '../methods/initProcess'
 import { useNavigate } from 'react-router-dom'
 import { updateDateToServer } from '../methods/requestProcess'
-import { getClassRoomId } from '../methods/commonProcess'
+import { errorCheck, getClassRoomId } from '../methods/commonProcess'
 import FormAddButton from '../common/FormAddButton'
 import BusinessImplButton from '../common/BusinessImplButton'
 import FormArea from '../common/FormArea'
 
 export default function ChangeScreen() {
+  const [errorFlag, setErrorFlag] = useState(false)
   const [formCnt, setFormCnt] = useState([0])
   const [beforeDate, setBeforeDate] = useState([])
   const [beforeKoma, setBeforeKoma] = useState([])
@@ -84,51 +85,67 @@ export default function ChangeScreen() {
       afterClassIds.push(delClassId)
     }
 
-    updateDateToServer(studentId, beforeClassIds, afterClassIds)
-    navigate("/menu")
+
+    if(errorCheck(beforeDate, beforeKoma) && errorCheck(afterDate, afterKoma) && beforeDate.length === afterDate.length){
+      updateDateToServer(studentId, beforeClassIds, afterClassIds)
+      setErrorFlag(false)
+      navigate("/menu")  
+    }else{
+      setErrorFlag(true)
+    }
   }
 
   return (
-    <Grid container spacing={2} width="80%" margin="auto">
+    <>
       {
-      formCnt.map((cnt) => (
-        <>
-          <Grid item xs={5} >
-            <FormArea
-              cnt={cnt}
-              handleDateList={beforeDate}
-              setHandleDateList={setBeforeDate}
-              handleKomaList={beforeKoma}
-              setHandleKomaList={setBeforeKoma}
-              masterDateList={comeDateList}
-              dateKomaTable={comeDateKomaTable}
-            />
-          </Grid>
-
-          <Grid item xs={5} marginLeft='2%' >
-            <FormArea
-                cnt={cnt}
-                handleDateList={afterDate}
-                setHandleDateList={setAfterDate}
-                handleKomaList={afterKoma}
-                setHandleKomaList={setAfterKoma}
-                masterDateList={selectableDateList}
-                dateKomaTable={selectableDateKomaTable}
-              />
-          </Grid>
-        </>
-       ))
+      errorFlag ? 
+        <Alert severity="error" onClose={() => {setErrorFlag(false)}} width='80%'>
+          選択した受講日とコマを確認してください（同じ日時を選択していませんか？ 何も入力せず更新ボタンを押しませんでしたか？ コマを入れ忘れていませんか？）
+        </Alert>
+      :
+        <></>
       }
-      
-      <Grid item xs={10} marginTop="1%" alignItems="right" marginBottom="2%">
-        <BusinessImplButton businessFunction={handleUpdate} buttonStr="登録"/>
+      <Grid container spacing={2} width="80%" margin="auto">
+        {
+        formCnt.map((cnt) => (
+          <>
+            <Grid item xs={5} >
+              <FormArea
+                cnt={cnt}
+                handleDateList={beforeDate}
+                setHandleDateList={setBeforeDate}
+                handleKomaList={beforeKoma}
+                setHandleKomaList={setBeforeKoma}
+                masterDateList={comeDateList}
+                dateKomaTable={comeDateKomaTable}
+              />
+            </Grid>
+
+            <Grid item xs={5} marginLeft='2%' >
+              <FormArea
+                  cnt={cnt}
+                  handleDateList={afterDate}
+                  setHandleDateList={setAfterDate}
+                  handleKomaList={afterKoma}
+                  setHandleKomaList={setAfterKoma}
+                  masterDateList={selectableDateList}
+                  dateKomaTable={selectableDateKomaTable}
+                />
+            </Grid>
+          </>
+        ))
+        }
+        
+        <Grid item xs={10} marginTop="1%" alignItems="right" marginBottom="2%">
+          <BusinessImplButton businessFunction={handleUpdate} buttonStr="登録"/>
+        </Grid>
+        <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
+          <FormAddButton formCnt={formCnt} setFormCnt={setFormCnt} />
+        </Grid>
+        <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
+          <BackButton />
+        </Grid>
       </Grid>
-      <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
-        <FormAddButton formCnt={formCnt} setFormCnt={setFormCnt} />
-      </Grid>
-      <Grid item xs={1} marginTop="1%" alignItems="right" marginBottom="2%">
-        <BackButton />
-      </Grid>
-    </Grid>
+    </>
   )
 }
