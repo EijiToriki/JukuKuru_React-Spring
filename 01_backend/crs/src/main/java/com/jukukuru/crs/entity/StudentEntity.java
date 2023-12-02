@@ -12,4 +12,5 @@ public class StudentEntity {
     private long teacher_id;
     private long classroom_id;
     private String name;
+    private int register_flag;
 }

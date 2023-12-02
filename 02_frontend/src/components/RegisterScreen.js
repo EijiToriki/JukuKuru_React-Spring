@@ -68,9 +68,8 @@ export default function RegisterScreen() {
         postClassIds.push(selectIconId)
       }
     }
-    console.log(studentId)
-    console.log(postClassIds)
     registerDateToServer(studentId, postClassIds)
+    localStorage.setItem("registerFlag", 1)
     navigate("/menu")
   }
 

@@ -32,6 +32,7 @@ export default function Login() {
         localStorage.setItem("teacherId", res.data.teacher_id)
         localStorage.setItem("classroomId", res.data.classroom_id)
         localStorage.setItem("name", res.data.name)
+        localStorage.setItem("registerFlag", res.data.register_flag)
         navigate("/menu")
       }else{
         console.log("ログイン失敗")

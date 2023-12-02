@@ -27,7 +27,8 @@ public class ClassroomService {
                     (int) studentInfo.get("id"),
                     (int) studentInfo.get("teacher_id"),
                     (int) studentInfo.get("classroom_id"),
-                    (String) studentInfo.get("name")
+                    (String) studentInfo.get("name"),
+                    (int) studentInfo.get("register_flag")
             );
             return studentEntity;
         }else{

@@ -12,7 +12,7 @@ export default function FormArea({cnt, handleDateList, setHandleDateList, handle
           labelId="delete-dates"
           id="delete-date"
           value={handleDateList[cnt]}
-          label="date"
+          label="来塾日"
           onChange={(event) => handleSelectBoxChange(event, cnt, handleDateList, setHandleDateList)}
         >
           {
