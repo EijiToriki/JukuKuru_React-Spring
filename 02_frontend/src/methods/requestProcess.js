@@ -12,6 +12,7 @@ const registerDateToServer = async(studentId, postClassIds) => {
         'Content-Type': 'application/json',
       },
     });
+    updateRegisterFlag(studentId)
   } catch (error) {
     console.error('Error:', error.message);
   }
@@ -52,6 +53,18 @@ const updateDateToServer = async(studentId, beforeClassIds, afterClassIds) => {
   }catch(error){
     console.error('Error:', error.message)
   }
+}
+
+
+const updateRegisterFlag = async(studentId) => {
+  const updateStudentId = {
+    "studentId" : studentId
+  }
+  await axios.put(baseURL + "updateRegisterFlag", updateStudentId, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 }
 
 export {registerDateToServer, deleteDateToServer, updateDateToServer}
