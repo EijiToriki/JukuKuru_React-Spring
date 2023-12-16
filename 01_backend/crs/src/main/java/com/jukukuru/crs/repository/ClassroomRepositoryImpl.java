@@ -152,6 +152,15 @@ public class ClassroomRepositoryImpl implements ClassroomRepository {
         }
     }
 
+    @Override
+    public void updateRegisterFlag(int studentId){
+        String query = """
+                UPDATE student SET
+                register_flag = 1
+                WHERE id = 
+                """ + studentId;
+        jdbcTemplate.update(query);
+    }
 
 
 }

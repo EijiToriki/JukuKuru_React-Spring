@@ -68,4 +68,11 @@ public class ClassroomController {
         return classroomService.deleteDatesByStudentId(studentId, deleteClassIds);
     }
 
+
+    @PutMapping("/updateRegisterFlag")
+    public void updateRegisterFlag(@RequestBody  UpdateRegisterFlagRequest updateRegisterFlagRequest){
+        int studentId = updateRegisterFlagRequest.getStudentId();
+        classroomService.updateRegisterFlag(studentId);
+    }
+
 }

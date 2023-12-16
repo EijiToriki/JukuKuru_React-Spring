@@ -22,4 +22,6 @@ public interface ClassroomRepository {
     int updateDatesByStudentId(int studentId, List<Integer> beforeClassIds, List<Integer> afterClassIds);
 
     int deleteDatesByStudentId(int studentId, List<Integer> deleteClassIds);
+
+    void updateRegisterFlag(int studentId);
 }

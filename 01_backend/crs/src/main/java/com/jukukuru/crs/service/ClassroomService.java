@@ -86,4 +86,9 @@ public class ClassroomService {
         return result;
     }
 
+    @Transactional
+    public void updateRegisterFlag(int studentId){
+        classroomRepository.updateRegisterFlag(studentId);
+    }
+
 }
