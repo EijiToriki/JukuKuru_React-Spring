@@ -11,6 +11,7 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { fetchDates, getClassRoomPropList, getDateClasstimeObj } from '../methods/initProcess';
 import BackButton from '../common/BackButton';
+import { useSelector } from 'react-redux';
 
 
 export default function InquiryScreen() {
@@ -18,8 +19,8 @@ export default function InquiryScreen() {
   const [openKomaList, setOpenKomaList] = React.useState([])
   const [comeDateKomaTable, setComeDateKomaTable] = React.useState({})
 
-  const studentId = localStorage.getItem("studentId")
-  const classroomId = localStorage.getItem("classroomId")
+  const studentId = useSelector(state => state.authorize.student_id)
+  const classroomId = useSelector(state => state.authorize.classroom_id)
 
   React.useEffect(() => {
     const getOpenDateParams = {

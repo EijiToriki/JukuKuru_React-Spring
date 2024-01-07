@@ -5,26 +5,30 @@ import SearchIcon from '@mui/icons-material/Search';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/authorizeSlice';
 
 export default function Menu() {
   const [alertFlag, setAlertFlag] = useState(false)
 
   const navigate = useNavigate()
-  const studentName = localStorage.getItem("name")
-  const registerFlag = localStorage.getItem("registerFlag")
-
+  const studentName = useSelector(state => state.authorize.name)
+  const registerFlag = useSelector(state => state.authorize.register_flag)
+  
   const handleRegister = () =>{
     navigate("/register")  
   }
 
+  const dispatch = useDispatch()
   const handleLogout = () =>{
-    localStorage.clear()
+    const action = logout()
+    dispatch(action)
     navigate("/")  
   }
 
   const moveFuctionScreen = (prefix) => {
     console.log(registerFlag)
-    if(registerFlag === "1"){
+    if(registerFlag ===1){
       navigate(prefix)    
     }else{
       setAlertFlag(true)
@@ -69,7 +73,7 @@ export default function Menu() {
         <Grid item xs={6}>
           <Box marginLeft="15%">
             {
-              registerFlag==="1" ?
+              registerFlag === 1 ?
                 <Button variant="contained" style={{width: "60%"}} size='large' disabled>受講日登録画面へ</Button>
               :
                 <Button variant="contained" style={{width: "60%"}} size='large' onClick={handleRegister}>受講日登録画面へ</Button>

@@ -14,6 +14,8 @@ import { fetchDates, getClassRoomPropList, getDateClasstimeObj } from '../method
 import BackButton from '../common/BackButton';
 import { registerDateToServer } from '../methods/requestProcess';
 import { getClassRoomId } from '../methods/commonProcess';
+import { useSelector, useDispatch } from 'react-redux';
+import { finishiRegister } from '../redux/authorizeSlice'
 
 export default function RegisterScreen() {
   const [openDateRes, setOpenDateRes] = useState({})
@@ -23,8 +25,9 @@ export default function RegisterScreen() {
   const [selectIcons, setSelectIcons] = React.useState({});
   const navigate = useNavigate()
 
-  const studentId = localStorage.getItem("studentId")
-  const classroomId = localStorage.getItem("classroomId")
+  const studentId = useSelector(state => state.authorize.student_id)
+  const classroomId = useSelector(state => state.authorize.classroom_id)
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     const params = {
@@ -69,7 +72,8 @@ export default function RegisterScreen() {
       }
     }
     registerDateToServer(studentId, postClassIds)
-    localStorage.setItem("registerFlag", 1)
+    const action = finishiRegister()
+    dispatch(action)
     navigate("/menu")
   }
 

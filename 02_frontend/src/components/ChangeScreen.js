@@ -8,6 +8,7 @@ import { errorCheck, getClassRoomId } from '../methods/commonProcess'
 import FormAddButton from '../common/FormAddButton'
 import BusinessImplButton from '../common/BusinessImplButton'
 import FormArea from '../common/FormArea'
+import { useSelector } from 'react-redux'
 
 export default function ChangeScreen() {
   const [errorFlag, setErrorFlag] = useState(false)
@@ -28,8 +29,8 @@ export default function ChangeScreen() {
 
   const navigate = useNavigate()
 
-  const studentId = localStorage.getItem("studentId")
-  const classroomId = localStorage.getItem("classroomId")
+  const studentId = useSelector(state => state.authorize.student_id)
+  const classroomId = useSelector(state => state.authorize.classroom_id)
 
   React.useEffect(() => {
     const getComeDateParams = {

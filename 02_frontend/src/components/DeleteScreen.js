@@ -8,6 +8,7 @@ import { errorCheck, getClassRoomId } from '../methods/commonProcess'
 import FormAddButton from '../common/FormAddButton'
 import BusinessImplButton from '../common/BusinessImplButton'
 import FormArea from '../common/FormArea'
+import { useSelector } from 'react-redux'
 
 export default function DeleteScreen() {
   const [errorFlag, setErrorFlag] = useState(false)
@@ -22,7 +23,7 @@ export default function DeleteScreen() {
   const [comeDatesResponse, setComeDatesResponse] = useState({})
   const navigate = useNavigate()
 
-  const studentId = localStorage.getItem("studentId")
+  const studentId = useSelector(state => state.authorize.student_id)
 
   React.useEffect(() => {
     const getComeDateParams = {

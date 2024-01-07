@@ -3,11 +3,14 @@ import { Button, Grid, Paper, TextField } from '@mui/material'
 import { baseURL } from '../common/Constants'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { login } from '../redux/authorizeSlice'
 
 export default function Login() {
   const [loginId, setLoginId] = useState("")
   const [password, setPassowrd] = useState("")
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleId = (event) => {
     setLoginId(event.target.value)
@@ -28,11 +31,8 @@ export default function Login() {
         params
       })
       if(res.data){
-        localStorage.setItem("studentId", res.data.id)
-        localStorage.setItem("teacherId", res.data.teacher_id)
-        localStorage.setItem("classroomId", res.data.classroom_id)
-        localStorage.setItem("name", res.data.name)
-        localStorage.setItem("registerFlag", res.data.register_flag)
+        const action = login(res.data)
+        dispatch(action)
         navigate("/menu")
       }else{
         console.log("ログイン失敗")
